@@ -7,6 +7,7 @@ USERNAMES: CSSC1147, CSSC1140
 
 #include <stdio.h>
 #include <iostream>
+#include "Processes.h"
 using namespace std;
 
 int main(int argc, char *argv[]){

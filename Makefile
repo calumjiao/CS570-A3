@@ -6,7 +6,7 @@
 
 
 all:
-	g++ main.cpp main.h processes.cpp -o aclock
+	g++ main.cpp Processes.h Processes.cpp -o aclock
 
 clean:
 	rm all main.cpp processes.cpp
