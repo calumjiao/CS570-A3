@@ -7,28 +7,19 @@ USERNAMES: CSSC1147, CSSC1140
 
 #include <stdio.h>
 #include <iostream>
-
-#include "main.h"
-
 using namespace std;
 
 int main(int argc, char *argv[]){
     
-    int sec;
-
-    if(argc == 1){			
-		sec = 30;
-    } else if (argc == 2){		
-		sec = atoi(argv[1]);
-    } else {				
-		cout << "Error\n";
+	int time;
+  if(argc == 1) time = 30; 
+	else if (argc == 2 && time > 0) time = atoi(argv[1]);
+  else { 
+		cout << "Error. Please try ./aclock or ./aclock <time>  \n";
 		exit(-1);
 	}
 
-	if(sec > 0)
-		run(sec);
-	else
-		cout << "Error\n";
+	run(time);
 	return 0;
 }    
     
