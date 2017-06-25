@@ -11,15 +11,15 @@ void run(int sec) {
 	int x;
 	pid_t proc1, proc2;
 
-	proc1 = fork();
+	proc1 = fork(); // Create new child process
+	// Check for errors
 	if(proc1 < 0){
-		cerr << "Error\n";
+		cerr << "Error" << endl;
 		exit(-1);
 	}
-	if(proc1 == 0){
-		localtime();
-	}
+	if(proc1 == 0) localtime();
 	else{
+		cout << "I was here" << endl;
 		proc2 = fork();
 		if(proc2 < 0){
 			cerr << "Error\n";
@@ -35,9 +35,10 @@ void run(int sec) {
 }
 
 int timer(int sec){
-	for(; sec >= 0; sec--){
+	while(sec >= 0){
 		cout << "Remaining Time: " << sec << " seconds\n";
 		sleep(1);
+		sec--;	
 	}
 	return sec;	
 }	
