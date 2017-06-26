@@ -11,9 +11,8 @@ USERNAMES: CSSC1147, CSSC1140
 using namespace std;
 
 int main(int argc, char *argv[]){
-    
 	int time;
-  if(argc == 1) time = 30; 
+	if(argc == 1) time = 30; 
 	else if (argc == 2) time = atoi(argv[1]);
 	else { 
 		cout << "Error. Please try ./aclock or ./aclock <time>" << endl;
