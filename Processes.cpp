@@ -9,9 +9,11 @@ USERNAMES: CSSC1147, CSSC1140
 #include <thread> 
 #include <signal.h>
 #include <semaphore.h>
+using namespace std;
 
 sem_t FLAG;
-int threadLock = 0;
+
+pthread_t processes[2];
 
 // After n seconds, send interrupt signal to process #1
 void *Processes::clockInterrupter(void *arg){
@@ -19,11 +21,11 @@ void *Processes::clockInterrupter(void *arg){
 	time_t theTime;
 	for(int i = 0; i < theTime; i++)
 		sleep(1);
-	int pthread_kill(clock, 15);
+	pthread_kill(processes[0], 15);
 }
 
 // Print the time forever until it is interrupted by process #2
-void *Processes::clock(void *arg){
+void *Processes::clock1(void *arg){
    
 	time_t theTime;
 	while(true){
@@ -40,18 +42,18 @@ void *Processes::clock(void *arg){
 }
 
 
-void run(int time){
+
+void Processes::run(long time){
 	// Create threads
+	long seconds = time;
+	long alarm = 123;
 	sem_init(&FLAG, 0, 2);
-	pthread_t processes[2];
-	int errorOne = pthread_create(&processes[0], NULL,  &clock, (void*)time);
 	int errorTwo = pthread_create(&processes[1], NULL,  &clockInterrupter, (void*)time);
-
-	// Set up pipes
-
+	int errorOne = pthread_create(&processes[0], NULL,  &clock1, (void*)alarm);
+	
 	
 	// Check for errors when creating the threads
-	if(errorOne == 0 || errorTwo == 0){
+	if(errorOne != 0 || errorTwo != 0){
 		cout << "An error occured while creating a thread" << endl;
         exit(EXIT_FAILURE);
 	}

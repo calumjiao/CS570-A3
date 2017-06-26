@@ -20,8 +20,8 @@ using namespace std;
 
 class Processes{
     public:
-        void run(int sec);
+        void run(long time);
     private:
-        void *clockInterrupter(void *arg);
-        void *clock(void *arg);
+        static void *clockInterrupter(void *arg);
+        static void *clock1(void *arg);
 };
