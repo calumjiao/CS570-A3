@@ -18,8 +18,8 @@ pthread_t processes[2];
 // After n seconds, send interrupt signal to process #1
 void *Processes::clockInterrupter(void *arg){
     long time = (long) arg;
-	time_t theTime;
-	for(int i = 0; i < theTime; i++)
+	//time_t theTime;
+	for(int i = 0; i < time; i++)
 		sleep(1);
 	pthread_kill(processes[0], 15);
 }
