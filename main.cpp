@@ -17,6 +17,7 @@ int main(int argc, char *argv[]){
 	long seconds;
 	Processes *process = new Processes;
 	
+	// Get the input provided by the user 
 	if(argc == 1) time = 30; 
 	else if (argc == 2) time = atol(argv[1]);
 	else if (argc == 5){
@@ -30,6 +31,7 @@ int main(int argc, char *argv[]){
 		exit(-1);
 	}
 
+	// Call the run fuction to start the clock
 	if(time > 0){
 		if(argc == 2) process -> run(time, -1, -1 , -1);
 		else if(argc == 5) process -> run(time, hour, minute, seconds);
