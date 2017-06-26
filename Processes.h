@@ -15,9 +15,6 @@ USERNAMES: CSSC1147, CSSC1140
 
 using namespace std;
 
-
-
-
 class Processes{
     public:
         void run(long time, int hour, int minutes, int seconds);
@@ -25,5 +22,4 @@ class Processes{
         static void *clockInterrupter(void *arg);
         static void *clock(void *arg);
         static void unlock(int signum);
-      //  static void setAlarm(int alarm[]);
 };
