@@ -16,7 +16,6 @@ using namespace std;
 sig_atomic_t threadLock = 0;
 pthread_t processes[2];
 
-
 void Processes::unlock(int signum){
 	threadLock = 1;
 }
@@ -39,7 +38,7 @@ void *Processes::clock(void *arg){
 	int hour;
 	int minutes;
 	int seconds;
-	long alarm = (long) arg;;
+	long alarm = (long) arg;
 
 	// Will loop forever untill the clockInterrupter changes the threadLock with signal.
 	while(threadLock == 0){
