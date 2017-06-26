@@ -20,9 +20,10 @@ using namespace std;
 
 class Processes{
     public:
-        void run(long time);
+        void run(long time, int hour, int minutes, int seconds);
     private:
         static void *clockInterrupter(void *arg);
-        static void *clock1(void *arg);
+        static void *clock(void *arg);
         static void unlock(int signum);
+      //  static void setAlarm(int alarm[]);
 };
