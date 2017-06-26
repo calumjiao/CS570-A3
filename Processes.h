@@ -15,6 +15,14 @@ USERNAMES: CSSC1147, CSSC1140
 
 using namespace std;
 
-void localtime();
-int timer(int sec);
-void run(int sec);
+
+
+
+class Processes{
+    public:
+        void run(int sec);
+    private:
+        static void *runBot(void *arg);
+        static void *localtime();
+        static int *timer(void * arg);
+};
