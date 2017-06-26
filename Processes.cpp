@@ -10,11 +10,12 @@ USERNAMES: CSSC1147, CSSC1140
 #include <signal.h>
 #include <semaphore.h>
 #include <csignal>
+#include <sstream>
 using namespace std;
 
-sem_t FLAG;
 sig_atomic_t threadLock = 0;
 pthread_t processes[2];
+
 
 void Processes::unlock(int signum){
 	threadLock = 1;
@@ -31,14 +32,35 @@ void *Processes::clockInterrupter(void *arg){
 }
 
 // Print the time forever until it is interrupted by process #2
-void *Processes::clock1(void *arg){
+void *Processes::clock(void *arg){
 	time_t theTime;
+	theTime = time(0); // get the time now
+	struct tm * now = localtime(&theTime);
+	int hour;
+	int minutes;
+	int seconds;
+	long alarm = (long) arg;;
+
+	// Will loop forever untill the clockInterrupter changes the threadLock with signal.
 	while(threadLock == 0){
-		theTime = time(0); // get the time now
-		struct tm * now = localtime(&theTime);
-		// Print the time in human format
-		cout << "The time: " << now -> tm_hour << ":"
-			<< now -> tm_min << ":" << now -> tm_sec << endl; 
+		// Get the time
+		hour = now -> tm_hour;
+		minutes = now -> tm_min;
+		seconds = now -> tm_sec;
+		// Print time in human readable format
+		cout << "The time: " << hour << ":"
+			<< minutes << ":" << seconds << endl; 
+
+		// If the alarm has been set then check if it should go off
+		if(alarm > 0){
+			// convert the time to a single long to compare to alarm
+			ostringstream currTime;
+			currTime << hour << minutes << seconds;
+			istringstream iss(currTime.str());
+			long currTimeInt;
+			iss >> currTimeInt;		
+			if(currTimeInt == alarm) cout << "RING RING RING. Alarm going off" << endl;
+		}	
 		sleep(1);	
 	}
 	pthread_exit(NULL);
@@ -46,15 +68,21 @@ void *Processes::clock1(void *arg){
 
 
 
-void Processes::run(long time){
+void Processes::run(long time, int hour, int minutes, int seconds){
+	// Make sure the thread is locked
+	threadLock = 0;
+
+	// Convert the alarm time to a single long so that it can be passed to the thread as a param
+	ostringstream alarm;
+	alarm << hour << minutes << seconds;
+	istringstream iss(alarm.str());
+	long alarmInt;
+	iss >> alarmInt;
+
 	// Create threads
-	long seconds = time;
-	long alarm = 123;
-	sem_init(&FLAG, 0, 2);
+	int errorOne = pthread_create(&processes[0], NULL,  &clock, (void*)alarmInt);
 	int errorTwo = pthread_create(&processes[1], NULL,  &clockInterrupter, (void*)time);
-	int errorOne = pthread_create(&processes[0], NULL,  &clock1, (void*)alarm);
-	
-	
+
 	// Check for errors when creating the threads
 	if(errorOne != 0 || errorTwo != 0){
 		cout << "An error occured while creating a thread" << endl;
