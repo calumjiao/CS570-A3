@@ -9,36 +9,39 @@ USERNAMES: CSSC1147, CSSC1140
 #include <thread> 
 #include <signal.h>
 #include <semaphore.h>
+#include <csignal>
 using namespace std;
 
 sem_t FLAG;
-
+sig_atomic_t threadLock = 0;
 pthread_t processes[2];
 
-// After n seconds, send interrupt signal to process #1
+void Processes::unlock(int signum){
+	threadLock = 1;
+}
+
+// After n seconds, unlock the thread to stop infinite loop in process #1
 void *Processes::clockInterrupter(void *arg){
     long time = (long) arg;
-	//time_t theTime;
+	signal(SIGINT, unlock); 
 	for(int i = 0; i < time; i++)
 		sleep(1);
-	pthread_kill(processes[0], 15);
+	raise(SIGINT);
+	pthread_exit(NULL);
 }
 
 // Print the time forever until it is interrupted by process #2
 void *Processes::clock1(void *arg){
-   
 	time_t theTime;
-	while(true){
-		//if(threadLock != 0) pthread_exit(NULL);
-		
-			theTime = time(0); // get the time now
-			struct tm * now = localtime(&theTime);
-			// Print the time in human format
-			cout << "The time: " << now -> tm_hour << ":"
-				<< now -> tm_min << ":" << now -> tm_sec << endl; 
-			sleep(1);
-		
+	while(threadLock == 0){
+		theTime = time(0); // get the time now
+		struct tm * now = localtime(&theTime);
+		// Print the time in human format
+		cout << "The time: " << now -> tm_hour << ":"
+			<< now -> tm_min << ":" << now -> tm_sec << endl; 
+		sleep(1);	
 	}
+	pthread_exit(NULL);
 }
 
 
@@ -63,7 +66,6 @@ void Processes::run(long time){
     pthread_join(processes[2], NULL);
 	
 	// Destroy semaphore and end program
-	sem_destroy(&FLAG);
     cout << "The program has finished running" << endl;
     pthread_exit(NULL);
 }

@@ -24,4 +24,5 @@ class Processes{
     private:
         static void *clockInterrupter(void *arg);
         static void *clock1(void *arg);
+        static void unlock(int signum);
 };
