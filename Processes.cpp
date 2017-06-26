@@ -71,14 +71,17 @@ void *Processes::clock(void *arg){
 void Processes::run(long time, int hour, int minutes, int seconds){
 	// Make sure the thread is locked
 	threadLock = 0;
-
-	// Convert the alarm time to a single long so that it can be passed to the thread as a param
-	ostringstream alarm;
-	alarm << hour << minutes << seconds;
-	istringstream iss(alarm.str());
 	long alarmInt;
-	iss >> alarmInt;
 
+	// If alarm time is provided, convert the alarm time to a single long so that it can be 
+	// passed to the thread as a param
+	if(hour + minutes + seconds > 0){
+		ostringstream alarm;
+		alarm << hour << minutes << seconds;
+		istringstream iss(alarm.str());
+		iss >> alarmInt;
+	} else alarmInt = -1;
+	
 	// Create threads
 	int errorOne = pthread_create(&processes[0], NULL,  &clock, (void*)alarmInt);
 	int errorTwo = pthread_create(&processes[1], NULL,  &clockInterrupter, (void*)time);
