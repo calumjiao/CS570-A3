@@ -6,7 +6,7 @@
 
 
 all:
-	g++ main.cpp Processes.h Processes.cpp -o aclock
+	g++ main.cpp Processes.h Processes.cpp -pthread -std=c++11 -o aclock
 
 clean:
 	rm all main.cpp processes.cpp

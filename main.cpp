@@ -18,8 +18,8 @@ int main(int argc, char *argv[]){
 		cout << "Error. Please try ./aclock or ./aclock <time>" << endl;
 		exit(-1);
 	}
-
-	if(time > 0) run(time);
+	Processes *process = new Processes;
+	if(time > 0) process -> run(time);
 	else cout << "Time must be greater than 0" << endl;
 	return 0;
 }    

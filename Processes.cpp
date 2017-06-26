@@ -6,27 +6,12 @@ USERNAMES: CSSC1147, CSSC1140
 */
 
 #include "Processes.h"
-#include "signal.h"
+#include <thread> 
+#include <signal.h>
+#include <semaphore.h>
+
 sem_t FLAG;
 int threadLock = 0;
-
-
-int clock(int time){
-	while(true){
-
-	}
-}
-
-
-int timer(int sec){
-	while(sec >= 0){
-		cout << "Remaining Time: " << sec << " seconds\n";
-		sleep(1);
-		sec--;	
-	}
-	return sec;	
-}	
-
 
 // After n seconds, send interrupt signal to process #1
 void *Processes::clockInterrupter(void *arg){
@@ -34,25 +19,23 @@ void *Processes::clockInterrupter(void *arg){
 	time_t theTime;
 	for(int i = 0; i < theTime; i++)
 		sleep(1);
-
+	int pthread_kill(clock, 15);
 }
 
 // Print the time forever until it is interrupted by process #2
 void *Processes::clock(void *arg){
-	dup2(pipeEnds1[1], STDOUT_FILENO);
-
-    long time = (long) arg;
+   
 	time_t theTime;
 	while(true){
-		if(threadLock != 0) pthread_exit(NULL);
-		else{
+		//if(threadLock != 0) pthread_exit(NULL);
+		
 			theTime = time(0); // get the time now
 			struct tm * now = localtime(&theTime);
 			// Print the time in human format
 			cout << "The time: " << now -> tm_hour << ":"
 				<< now -> tm_min << ":" << now -> tm_sec << endl; 
 			sleep(1);
-		}
+		
 	}
 }
 
@@ -62,11 +45,9 @@ void run(int time){
 	sem_init(&FLAG, 0, 2);
 	pthread_t processes[2];
 	int errorOne = pthread_create(&processes[0], NULL,  &clock, (void*)time);
-	int errorTwo = pthread_create(&processes[1], NULL,  &runBot, (void*)id);
+	int errorTwo = pthread_create(&processes[1], NULL,  &clockInterrupter, (void*)time);
 
 	// Set up pipes
-	
-	
 
 	
 	// Check for errors when creating the threads

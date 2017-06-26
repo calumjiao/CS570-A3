@@ -22,7 +22,6 @@ class Processes{
     public:
         void run(int sec);
     private:
-        static void *runBot(void *arg);
-        static void *localtime();
-        static int *timer(void * arg);
+        void *clockInterrupter(void *arg);
+        void *clock(void *arg);
 };
