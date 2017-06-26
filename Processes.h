@@ -15,6 +15,14 @@ USERNAMES: CSSC1147, CSSC1140
 
 using namespace std;
 
-void localtime();
-int timer(int sec);
-void run(int sec);
+
+
+
+class Processes{
+    public:
+        void run(long time);
+    private:
+        static void *clockInterrupter(void *arg);
+        static void *clock1(void *arg);
+        static void unlock(int signum);
+};

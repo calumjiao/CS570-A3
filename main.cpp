@@ -11,16 +11,15 @@ USERNAMES: CSSC1147, CSSC1140
 using namespace std;
 
 int main(int argc, char *argv[]){
-    
-	int time;
-  if(argc == 1) time = 30; 
-	else if (argc == 2) time = atoi(argv[1]);
+	long time;
+	if(argc == 1) time = 30; 
+	else if (argc == 2) time = atol(argv[1]);
 	else { 
 		cout << "Error. Please try ./aclock or ./aclock <time>" << endl;
 		exit(-1);
 	}
-
-	if(time > 0) run(time);
+	Processes *process = new Processes;
+	if(time > 0) process -> run(time);
 	else cout << "Time must be greater than 0" << endl;
 	return 0;
 }    
