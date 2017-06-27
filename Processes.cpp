@@ -11,6 +11,7 @@ USERNAMES: CSSC1147, CSSC1140
 #include <semaphore.h>
 #include <csignal>
 #include <sstream>
+#include <unistd.h>
 using namespace std;
 
 volatile sig_atomic_t threadLock = 0;
@@ -20,18 +21,15 @@ void Processes::unlock(int signum){
 	threadLock = 1;
 }
 
-
 // After n seconds, unlock the thread to stop infinite loop in process #1
 void *Processes::clockInterrupter(void *arg){
     long time = (long) arg;
 	signal(SIGINT, unlock); 
-	for(int i = 1; i <= time; i++)
+	for(int i = 0; i <= time; i++)
 		sleep(1);
 	raise(SIGINT);
 	pthread_exit(NULL);
 }
-
-
 
 // Print the time forever until it is interrupted by process #2
 void *Processes::clock(void *arg){
@@ -85,8 +83,8 @@ void Processes::run(long time, int hour, int minutes, int seconds){
 	
 	// Create threads
 	int errorTwo = pthread_create(&processes[1], NULL,  &clockInterrupter, (void*)time); // Thread two
+	usleep(15); 
 	int errorOne = pthread_create(&processes[0], NULL,  &clock, (void*)alarmInt); // Thread one
-	
 
 	// Check for errors when creating the threads
 	if(errorOne != 0 || errorTwo != 0){
