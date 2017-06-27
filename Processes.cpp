@@ -12,6 +12,7 @@ USERNAMES: CSSC1147, CSSC1140
 #include <csignal>
 #include <sstream>
 #include <unistd.h>
+#include <string.h>
 using namespace std;
 
 volatile sig_atomic_t threadLock = 0;
@@ -25,7 +26,7 @@ void Processes::unlock(int signum){
 void *Processes::clockInterrupter(void *arg){
     long time = (long) arg;
 	signal(SIGINT, unlock); 
-	for(int i = 0; i <= time; i++)
+	for(int i = 0; i < time; i++)
 		sleep(1);
 	raise(SIGINT);
 	pthread_exit(NULL);
@@ -38,13 +39,14 @@ void *Processes::clock(void *arg){
 	int seconds;
 	time_t theTime;
 	long alarm = (long) arg;
+	struct tm * now = localtime(&theTime);
 
 	// Will loop forever untill the clockInterrupter changes the threadLock with signal.
 	while(threadLock == 0){
 		// Get the time
 		
 		theTime = time(0); // get the time now
-		struct tm * now = localtime(&theTime);
+		now = localtime(&theTime);
 		hour = now -> tm_hour;
 		minutes = now -> tm_min;
 		seconds = now -> tm_sec;
@@ -64,6 +66,15 @@ void *Processes::clock(void *arg){
 		}	
 		sleep(1);	
 	}
+	// Print the time when it ends
+	theTime = time(0); // get the time now
+	now = localtime(&theTime);
+	hour = now -> tm_hour;
+	minutes = now -> tm_min;
+	seconds = now -> tm_sec;
+	// Print time in human readable format
+		cout << "Time: " << hour << ":"
+			<< minutes << ":" << seconds << endl;
 	pthread_exit(NULL);
 }
 
