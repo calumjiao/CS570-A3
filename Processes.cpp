@@ -73,8 +73,8 @@ void *Processes::clock(void *arg){
 	minutes = now -> tm_min;
 	seconds = now -> tm_sec;
 	// Print time in human readable format
-		cout << "Time: " << hour << ":"
-			<< minutes << ":" << seconds << endl;
+	cout << "Time: " << hour << ":"
+		<< minutes << ":" << seconds << endl;
 	pthread_exit(NULL);
 }
 
