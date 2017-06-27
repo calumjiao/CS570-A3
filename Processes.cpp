@@ -20,27 +20,31 @@ void Processes::unlock(int signum){
 	threadLock = 1;
 }
 
+
 // After n seconds, unlock the thread to stop infinite loop in process #1
 void *Processes::clockInterrupter(void *arg){
     long time = (long) arg;
 	signal(SIGINT, unlock); 
-	for(int i = 0; i <= time; i++)
+	for(int i = 1; i <= time; i++)
 		sleep(1);
 	raise(SIGINT);
 	pthread_exit(NULL);
 }
+
+
 
 // Print the time forever until it is interrupted by process #2
 void *Processes::clock(void *arg){
 	int hour;
 	int minutes;
 	int seconds;
+	time_t theTime;
 	long alarm = (long) arg;
 
 	// Will loop forever untill the clockInterrupter changes the threadLock with signal.
 	while(threadLock == 0){
 		// Get the time
-		time_t theTime;
+		
 		theTime = time(0); // get the time now
 		struct tm * now = localtime(&theTime);
 		hour = now -> tm_hour;
@@ -80,8 +84,9 @@ void Processes::run(long time, int hour, int minutes, int seconds){
 	} else alarmInt = -1;
 	
 	// Create threads
-	int errorOne = pthread_create(&processes[0], NULL,  &clock, (void*)alarmInt); // Thread one
 	int errorTwo = pthread_create(&processes[1], NULL,  &clockInterrupter, (void*)time); // Thread two
+	int errorOne = pthread_create(&processes[0], NULL,  &clock, (void*)alarmInt); // Thread one
+	
 
 	// Check for errors when creating the threads
 	if(errorOne != 0 || errorTwo != 0){

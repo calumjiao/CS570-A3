@@ -11,7 +11,7 @@ USERNAMES: CSSC1147, CSSC1140
 using namespace std;
 
 int main(int argc, char *argv[]){
-	long time;
+	long time = 0;
 	long hour;
 	long minute;
 	long seconds;
@@ -33,7 +33,7 @@ int main(int argc, char *argv[]){
 
 	// Call the run fuction to start the clock
 	if(time > 0){
-		if(argc == 2) process -> run(time, -1, -1 , -1);
+		if(argc == 2 || argc == 1) process -> run(time, -1, -1 , -1);
 		else if(argc == 5) process -> run(time, hour, minute, seconds);
 	} 
 	else cout << "Time must be greater than 0" << endl;
